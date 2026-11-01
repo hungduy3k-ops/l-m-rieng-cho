@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>For You 💗</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap">
+<style>
+:root{
+ color-scheme:dark;
+ --ink:#f6f1f4; --ink-soft:rgba(246,241,244,.72); --ink-dim:rgba(246,241,244,.5);
+ --glass:rgba(255,255,255,.12); --glass-line:rgba(255,255,255,.18);
+ --blush:#e9b9cb; --blue:#0a84ff;
+ --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+ --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+ display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(ellipse at 50% 0%,#2a2238 0%,#14121d 55%,#0b0a11 100%);
+ font-family:var(--sans);color:var(--ink);overflow:hidden;
+ padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)
+}
+#stars,#petals{position:fixed;inset:0;pointer-events:none}
+#petals{z-index:10}
+.phone{
+ width:min(390px,94vw);height:min(820px,94vh);position:relative;
+ background:#0a0a0e;border-radius:52px;padding:9px;
+ box-shadow:0 0 0 1.5px #3b3a44,0 0 0 4px #15151a,0 40px 100px rgba(0,0,0,.7),inset 0 0 0 1px #000;
+ overflow:hidden
+}
+.screen{height:100%;width:100%;border-radius:43px;overflow:hidden;position:relative;background:#14121d}
+.wallpaper{
+ position:absolute;inset:0;
+ background:
+  radial-gradient(circle at 82% 12%,rgba(233,185,203,.38),transparent 42%),
+  radial-gradient(circle at 12% 88%,rgba(150,138,212,.30),transparent 46%),
+  linear-gradient(160deg,#1c1830 0%,#2b2038 52%,#14111d 100%)
+}
+.wallpaper:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 35%,rgba(0,0,0,.28))}
+.dynamic-island{position:absolute;z-index:5;top:11px;left:50%;transform:translateX(-50%);width:110px;height:31px;border-radius:20px;background:#000}
+.status{position:absolute;z-index:4;top:17px;left:30px;right:30px;display:flex;justify-content:space-between;font-size:13px;font-weight:600;letter-spacing:.2px}
+.status span:last-child{letter-spacing:1.5px;font-size:11px;opacity:.9}
+.lock-content{position:absolute;z-index:2;inset:70px 18px 22px;text-align:center}
+.date{font-size:14px;font-weight:500;color:var(--ink-soft);margin-top:24px;letter-spacing:.4px;text-transform:capitalize}
+.clock{font-family:var(--serif);font-size:92px;font-weight:300;letter-spacing:-1px;line-height:1;margin-top:4px;color:var(--ink);text-shadow:0 2px 30px rgba(233,185,203,.25)}
+.lock-note{font-size:12px;color:var(--ink-dim);margin-top:10px;letter-spacing:.6px}
+.notification{
+ margin-top:58px;text-align:left;padding:14px 15px;cursor:pointer;
+ background:var(--glass);border:1px solid var(--glass-line);border-radius:22px;
+ -webkit-backdrop-filter:blur(26px) saturate(150%);backdrop-filter:blur(26px) saturate(150%);
+ box-shadow:0 10px 30px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.12);
+ transition:transform .2s ease,background .2s ease;animation:float 3.6s ease-in-out infinite
+}
+.notification:active{transform:scale(.98);background:rgba(255,255,255,.18)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.not-head{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--ink-soft);letter-spacing:.8px}
+.app-icon{width:26px;height:26px;border-radius:7px;background:linear-gradient(180deg,#5fe17f,#27b84f);display:grid;place-items:center;font-size:15px}
+.not-time{margin-left:auto;letter-spacing:.2px}
+.not-title{font-weight:600;margin:10px 0 3px;font-size:14px}
+.not-text{font-size:13px;color:var(--ink-soft);line-height:1.45}
+.tap-hint{font-size:11px;color:var(--ink-dim);text-align:center;margin-top:34px;letter-spacing:.5px}
+.lock-bottom{position:absolute;bottom:26px;left:26px;right:26px;display:flex;justify-content:space-between}
+.lock-circle{width:46px;height:46px;border-radius:50%;background:var(--glass);display:grid;place-items:center;font-size:18px;border:1px solid var(--glass-line);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.home-line{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:120px;height:5px;border-radius:5px;background:rgba(255,255,255,.85);z-index:8}
+/* passcode */
+.passcode{display:none;position:absolute;z-index:6;inset:0;text-align:center;padding:88px 25px 30px;
+ background:linear-gradient(160deg,rgba(28,24,48,.82),rgba(60,42,72,.86) 55%,rgba(20,17,29,.9));
+ -webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.pass-title{font-family:var(--serif);font-size:30px;font-weight:400;margin-bottom:6px}
+.pass-sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px}
+.dots{display:flex;justify-content:center;gap:16px;margin:22px}
+.dots.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.dot{width:11px;height:11px;border:1.2px solid var(--ink);border-radius:50%;transition:background .15s}
+.dot.filled{background:var(--ink)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 20px;max-width:262px;margin:22px auto}
+.key{height:62px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:var(--ink);font-size:26px;font-weight:300;cursor:pointer;font-family:var(--sans);transition:background .12s}
+.key small{display:block;font-size:8.5px;letter-spacing:2.4px;margin-top:-2px;font-weight:500;color:var(--ink-soft)}
+.key:active{background:rgba(255,255,255,.4)}
+.pass-error{font-size:12px;color:#f6c6da;height:18px}
+.cancel{background:none;border:0;color:var(--ink);margin-top:4px;cursor:pointer;font-size:14px;font-family:var(--sans)}
+/* chat */
+.chat{display:none;position:absolute;inset:0;z-index:3;background:#fff;color:#111;animation:fade .4s ease}
+.chat-top{height:96px;padding:46px 14px 8px;background:rgba(248,248,250,.94);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:.5px solid #d9d9de;display:flex;align-items:center;gap:8px;position:relative;z-index:2}
+.back{border:0;background:none;color:var(--blue);font-size:30px;line-height:1;cursor:pointer;padding:0 4px 4px}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#f3c4d6,#b7a6ec);display:grid;place-items:center;font-size:15px}
+.contact{text-align:left;flex:1;font-size:14px;font-weight:600;padding-left:2px}
+.contact small{display:block;font-weight:400;color:#8a8a8f;font-size:11px;margin-top:1px}
+.chat-body{height:calc(100% - 160px);overflow-y:auto;padding:16px 14px 20px;display:flex;flex-direction:column;gap:6px;scrollbar-width:none}
+.chat-body::-webkit-scrollbar{display:none}
+.day{text-align:center;color:#8a8a8f;font-size:11px;margin:4px 0 10px;letter-spacing:.3px}
+.bubble{max-width:78%;padding:9px 14px;border-radius:20px;font-size:15px;line-height:1.38;word-wrap:break-word;animation:pop .28s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.94)}to{opacity:1;transform:none}}
+.received{align-self:flex-start;background:#e9e9eb;color:#111;border-bottom-left-radius:6px;transform-origin:left bottom}
+.sent{align-self:flex-end;background:linear-gradient(180deg,#2a95ff,#0a84ff);color:#fff;border-bottom-right-radius:6px;transform-origin:right bottom}
+.typing{align-self:flex-start;background:#e9e9eb;border-radius:20px;border-bottom-left-radius:6px;padding:12px 15px;display:flex;gap:4px;animation:pop .25s ease}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9a9a9f;animation:bounce 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.composer{position:absolute;bottom:20px;left:12px;right:12px;display:flex;gap:8px;align-items:center}
+.composer input{flex:1;min-width:0;border:1px solid #d6d6db;border-radius:22px;padding:10px 15px;font-size:15px;outline:none;background:#fff;font-family:var(--sans);color:#111}
+.composer input:focus{border-color:#b9b9c0}
+.send{width:34px;height:34px;border:0;border-radius:50%;background:var(--blue);color:#fff;font-size:17px;cursor:pointer;flex:none}
+.send:disabled{opacity:.35}
+.app{display:none;position:absolute;inset:0;z-index:3}
+#home{padding:80px 22px 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 6px}
+.ic{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;cursor:pointer;color:var(--ink);background:none;border:0;position:relative;font-family:var(--sans)}
+.ic b{width:58px;height:58px;border-radius:15px;display:grid;place-items:center;font-size:28px;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .15s}
+.ic:active b{transform:scale(.92)}
+.badge{position:absolute;top:-5px;right:0;min-width:20px;height:20px;border-radius:10px;background:#ff3b30;font-size:12px;display:grid;place-items:center;padding:0 5px;font-weight:600}
+#photos,#music{background:#12101b;overflow-y:auto;scrollbar-width:none}
+.app-head{padding:52px 16px 12px;display:flex;align-items:center;gap:8px}
+.app-head h2{flex:1;font-family:var(--serif);font-size:32px;font-weight:400}
+.add{border:0;background:var(--glass);color:var(--ink);width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer}
+.app-head .back{color:var(--blush);padding:0 6px 4px 0}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:0 2px 90px}
+.pgrid img{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;display:block}
+.empty{text-align:center;color:var(--ink-dim);font-size:13px;padding:60px 30px;line-height:1.7;grid-column:1/-1}
+#lightbox{display:none;position:absolute;inset:0;z-index:9;background:rgba(0,0,0,.95);align-items:center;justify-content:center;cursor:pointer}
+#lightbox img{max-width:100%;max-height:100%}
+.np{text-align:center;padding:0 26px}
+.cover{width:180px;height:180px;margin:6px auto 18px;border-radius:22px;background:linear-gradient(135deg,#e9b9cb,#8d7ad8);display:grid;place-items:center;font-size:66px;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.np h3{font-size:18px;font-weight:600}.np p{font-size:13px;color:var(--ink-soft);margin-top:3px}
+.bar{height:4px;background:rgba(255,255,255,.2);border-radius:4px;margin:18px 0 6px;cursor:pointer;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink)}
+.times{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-dim)}
+.ctrl{display:flex;justify-content:center;align-items:center;gap:30px;margin:10px 0 14px}
+.ctrl button{border:0;background:none;color:var(--ink);font-size:26px;cursor:pointer}
+.ctrl .pp{font-size:36px}
+.songs{padding:0 16px 90px}
+.song{padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:14px}
+.song.on{color:var(--blush)}
+.song small{display:block;color:var(--ink-dim);font-size:12px;margin-top:2px}
+.home-line{mix-blend-mode:difference;background:#fff;cursor:pointer}
+.home-line:after{content:"";position:absolute;inset:-14px -12px}
+@media(max-width:500px){
+ .phone{width:100vw;height:100dvh;border-radius:0;padding:0;box-shadow:none}
+ .screen{border-radius:0}
+ .dynamic-island,.status{display:none}
+ .lock-content{inset:calc(env(safe-area-inset-top,0px) + 30px) 18px 22px}
+ .chat-top{height:auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 10px}
+ .chat-body{height:calc(100% - 130px)}
+ .composer{bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}
+}
+@media(max-height:650px){
+ .notification{margin-top:30px}.clock{font-size:70px}
+ .passcode{padding-top:50px}.keypad{gap:8px 20px;margin:12px auto}.key{height:50px}
+}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<canvas id="petals"></canvas>
+
+<div class="phone">
+ <div class="screen">
+  <div class="wallpaper"></div>
+  <div class="dynamic-island"></div>
+  <div class="status"><span id="statusTime">9:41</span><span>●●●  Wi-Fi  ▰</span></div>
+
+  <!-- LOCK SCREEN -->
+  <div class="lock-content" id="lockContent">
+   <div class="date" id="dateText">Thứ Hai, ngày 2 tháng 11</div>
+   <div class="clock" id="clock">9:41</div>
+   <div class="lock-note">Chạm để mở khóa điện thoại</div>
+   <div class="notification" onclick="showPasscode()">
+    <div class="not-head">
+     <div class="app-icon">💬</div>
+     <b>TIN NHẮN</b>
+     <span class="not-time">bây giờ</span>
+    </div>
+    <div class="not-title">Một người 💗</div>
+    <div class="not-text">Có vài điều tớ muốn nói với cậu...</div>
+   </div>
+   <div class="tap-hint">Chạm vào thông báo để xem tin nhắn</div>
+   <div class="lock-bottom"><div class="lock-circle">🔦</div><div class="lock-circle">📷</div></div>
+  </div>
+
+  <!-- PASSCODE -->
+  <div class="passcode" id="passcode">
+   <div style="font-size:28px;margin-bottom:14px">🔒</div>
+   <div class="pass-title">Nhập mật mã</div>
+   <div class="pass-sub">Nhập mật mã để mở khóa iPhone</div>
+   <div class="dots" id="dots">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+   </div>
+   <div class="pass-error" id="passError"></div>
+   <div class="keypad">
+    <button class="key" onclick="pressKey('1')">1</button>
+    <button class="key" onclick="pressKey('2')">2<small>ABC</small></button>
+    <button class="key" onclick="pressKey('3')">3<small>DEF</small></button>
+    <button class="key" onclick="pressKey('4')">4<small>GHI</small></button>
+    <button class="key" onclick="pressKey('5')">5<small>JKL</small></button>
+    <button class="key" onclick="pressKey('6')">6<small>MNO</small></button>
+    <button class="key" onclick="pressKey('7')">7<small>PQRS</small></button>
+    <button class="key" onclick="pressKey('8')">8<small>TUV</small></button>
+    <button class="key" onclick="pressKey('9')">9<small>WXYZ</small></button>
+    <button class="key" style="visibility:hidden"></button>
+    <button class="key" onclick="pressKey('0')">0</button>
+    <button class="key" onclick="deleteKey()">⌫</button>
+   </div>
+   <button class="cancel" onclick="hidePasscode()">Hủy</button>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat" id="chat">
+   <div class="chat-top">
+    <button class="back" onclick="openApp('home')">‹</button>
+    <div class="avatar">💗</div>
+    <div class="contact">Một người đặc biệt<small>iMessage</small></div>
+    <span style="color:var(--blue)">ⓘ</span>
+   </div>
+   <div class="chat-body" id="chatBody"><div class="day">iMessage hôm nay</div></div>
+   <div class="composer">
+    <input id="replyInput" placeholder="iMessage..." autocomplete="off">
+    <button class="send" id="sendBtn" onclick="sendReply()">↑</button>
+   </div>
+  </div>
+
+  <!-- MÀN HÌNH CHÍNH -->
+  <div class="app" id="home"><div class="grid">
+   <button class="ic" onclick="openApp('chat')"><b style="background:linear-gradient(180deg,#5fe17f,#27b84f)">💬</b>Tin nhắn<span class="badge" id="badge">1</span></button>
+   <button class="ic" onclick="openApp('photos')"><b style="background:linear-gradient(135deg,#fff,#f3d2e0)">🌸</b>Ảnh</button>
+   <button class="ic" onclick="openApp('music')"><b style="background:linear-gradient(180deg,#ff6b81,#e0245e)">🎵</b>Nhạc</button>
+  </div></div>
+
+  <!-- ẢNH -->
+  <div class="app" id="photos">
+   <div class="app-head"><button class="back" onclick="openApp('home')">‹</button><h2>Kỉ niệm</h2><button class="add" onclick="$('pf').click()">+</button><input type="file" id="pf" accept="image/*" multiple hidden></div>
+   <div class="pgrid" id="pgrid"></div>
+  </div>
+  <div id="lightbox" onclick="this.style.display='none'"><img id="lbimg" alt=""></div>
+
+  <!-- NHẠC -->
+  <div class="app" id="music">
+   <div class="app-head"><button class="back" onclick="openApp('home')">‹</button><h2>Nhạc</h2><button class="add" onclick="$('mf').click()">+</button><input type="file" id="mf" accept="audio/*" multiple hidden></div>
+   <div class="np">
+    <div class="cover">🎵</div>
+    <h3 id="sTitle">Chưa chọn bài</h3><p id="sArtist">—</p>
+    <div class="bar" id="bar"><i id="barfill"></i></div>
+    <div class="times"><span id="tcur">0:00</span><span id="tdur">0:00</span></div>
+    <div class="ctrl"><button onclick="prevSong()">⏮</button><button class="pp" id="pp" onclick="toggleSong()">▶</button><button onclick="nextSong()">⏭</button></div>
+   </div>
+   <div class="songs" id="songs"></div>
+  </div>
+
+  <div class="home-line" id="homeLine" onclick="if(unlocked)openApp('home')"></div>
+ </div>
+</div>
+
+<script type="application/json" id="media">{"photos":[],"songs":[]}</script>
+<script>
+// ÂM THANH (tổng hợp bằng WebAudio, không cần file)
+let AC=null;
+function ac(){
+ try{
+  if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended')AC.resume();
+ }catch(e){}
+ return AC;
+}
+function tone(freq,t0,dur,vol){
+ const a=ac();if(!a)return;
+ const g=a.createGain();
+ g.gain.setValueAtTime(0.0001,t0);
+ g.gain.exponentialRampToValueAtTime(vol,t0+.006);
+ g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+ g.connect(a.destination);
+ [[1,1],[2.01,.28],[3.02,.1]].forEach(([m,v])=>{
+  const o=a.createOscillator(),og=a.createGain();
+  o.type='sine';o.frequency.value=freq*m;og.gain.value=v;
+  o.connect(og);og.connect(g);o.start(t0);o.stop(t0+dur+.05);
+ });
+}
+function playReceive(){
+ const a=ac();if(!a)return;const t=a.currentTime+.02;
+ [1174.7,1568,1975.5].forEach((f,i)=>tone(f,t+i*.11,.55,.16));
+ try{navigator.vibrate&&navigator.vibrate([40,60,40])}catch(e){}
+}
+function playSend(){
+ const a=ac();if(!a)return;const t=a.currentTime+.01;
+ const len=Math.floor(a.sampleRate*.28),buf=a.createBuffer(1,len,a.sampleRate),d=buf.getChannelData(0);
+ for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+ const src=a.createBufferSource();src.buffer=buf;
+ const bp=a.createBiquadFilter();bp.type='bandpass';bp.Q.value=1.2;
+ bp.frequency.setValueAtTime(500,t);bp.frequency.exponentialRampToValueAtTime(3200,t+.24);
+ const g=a.createGain();
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.12,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+.26);
+ src.connect(bp);bp.connect(g);g.connect(a.destination);src.start(t);
+ tone(1400,t+.03,.18,.05);
+}
+function playTick(){const a=ac();if(a)tone(1900,a.currentTime,.05,.05)}
+function playUnlock(){const a=ac();if(!a)return;const t=a.currentTime;tone(880,t,.35,.1);tone(1318.5,t+.1,.5,.1)}
+function playError(){const a=ac();if(!a)return;const t=a.currentTime;tone(220,t,.18,.12);tone(196,t+.14,.25,.12);try{navigator.vibrate&&navigator.vibrate(120)}catch(e){}}
+
+// ĐỒNG HỒ
+function updateClock(){
+ const d=new Date();
+ const time=d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',hour12:false});
+ document.getElementById('clock').textContent=time;
+ document.getElementById('statusTime').textContent=time;
+ document.getElementById('dateText').textContent=
+  d.toLocaleDateString('vi-VN',{weekday:'long',day:'numeric',month:'long'});
+}
+updateClock();setInterval(updateClock,1000);
+
+// MẬT KHẨU
+const PASSWORD="020305";
+let entered="";
+function showPasscode(){
+ ac();playTick();
+ document.getElementById('passcode').style.display='block';
+ document.getElementById('passError').textContent='';
+}
+function hidePasscode(){
+ document.getElementById('passcode').style.display='none';
+ entered="";updateDots();
+}
+function updateDots(){
+ document.querySelectorAll('.dot').forEach((dot,i)=>dot.classList.toggle('filled',i<entered.length));
+}
+function pressKey(n){
+ if(entered.length>=6)return;
+ playTick();
+ entered+=n;updateDots();
+ if(entered.length===6){
+  setTimeout(()=>{
+   if(entered===PASSWORD){
+    playUnlock();
+    document.getElementById('passcode').style.display='none';
+    document.getElementById('lockContent').style.display='none';
+    unlocked=true;openApp('home');
+   }else{
+    playError();
+    const dots=document.getElementById('dots');
+    dots.classList.remove('shake');void dots.offsetWidth;dots.classList.add('shake');
+    document.getElementById('passError').textContent='Mật mã không đúng. Thử lại nhé!';
+    entered="";updateDots();
+   }
+  },250);
+ }
+}
+function deleteKey(){playTick();entered=entered.slice(0,-1);updateDots()}
+function backToLock(){
+ document.getElementById('chat').style.display='none';
+ document.getElementById('lockContent').style.display='block';
+ document.getElementById('homeLine').style.display='block';
+}
+
+// CUỘC TRÒ CHUYỆN
+const messages=[
+ "Có vài điều hd muốn nói với kp...",
+ "Mấy ngày nay hd cx suy nghĩ rất nhiều hd mún xin lỗi kp.",
+ "Vì hd biết mình đã có những lúc không tốt, khiến kp buồn và tổn thương.",
+ "Hd không mong Kp phải quên hết mọi chuyện ngay lập tức.",
+ "Xin lỗi vì sự cố chấp này kp có hỏi hd tại sao lại yêu kp nhiều như vậy .",
+ "Hd cũng muốn nói kp cho hd cảm giác được che chở một người là như thế nào,hd vẫn muốn nghe kp kêu một tiếng hd ơi kp đói  .",
+ "Hd chỉ muốn Kp biết là những điều Hd nói hôm nay đều là thật lòng.",
+ "Cảm ơn kp vì đã dành thời gian đọc những dòng này. 💗"
+];
+let messageIndex=0,conversationStarted=false,waiting=false,finished=false;
+
+function addBubble(text,type){
+ const body=document.getElementById('chatBody');
+ const b=document.createElement('div');
+ b.className='bubble '+type;b.textContent=text;
+ body.appendChild(b);body.scrollTop=body.scrollHeight;
+}
+function showTyping(){
+ const body=document.getElementById('chatBody');
+ const t=document.createElement('div');
+ t.className='typing';t.id='typing';t.innerHTML='<i></i><i></i><i></i>';
+ body.appendChild(t);body.scrollTop=body.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('typing');if(t)t.remove()}
+function senderMessage(){
+ if(messageIndex>=messages.length){
+  if(!finished){
+   finished=true;
+   addBubble("Hd đã nói hết những điều muốn nói rồi. Kp cứ từ từ suy nghĩ nhé. 💗","received");
+   playReceive();
+  }
+  waiting=false;return;
+ }
+ waiting=true;showTyping();
+ setTimeout(()=>{
+  removeTyping();
+  addBubble(messages[messageIndex],'received');
+  playReceive();
+  messageIndex++;waiting=false;
+  document.getElementById('replyInput').focus();
+ },1400);
+}
+function startConversation(){
+ if(conversationStarted)return;
+ conversationStarted=true;
+ setTimeout(senderMessage,900);
+}
+function sendReply(){
+ const input=document.getElementById('replyInput');
+ const text=input.value.trim();
+ if(!text||waiting||messageIndex>messages.length)return;
+ addBubble(text,'sent');playSend();
+ input.value='';
+ if(finished)return;
+ waiting=true;
+ setTimeout(senderMessage,900);
+}
+document.getElementById('replyInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendReply()});
+
+// ====== ỨNG DỤNG ẢNH & NHẠC ======
+const $=id=>document.getElementById(id);
+let unlocked=false;
+const APPS=['home','chat','photos','music'];
+function openApp(n){
+ APPS.forEach(a=>$(a).style.display=a===n?'block':'none');
+ $('lightbox').style.display='none';
+ if(n==='chat'){$('badge').style.display='none';startConversation();}
+}
+
+// (Cách cũ, không bắt buộc) >>> TỰ GHI ĐƯỜNG DẪN ẢNH / NHẠC Ở ĐÂY <<<
+// Ảnh: bỏ file vào thư mục "anh" cạnh file này rồi ghi đường dẫn, ví dụ "anh/1.jpg"
+const PHOTOS=[
+  "anh1.jpg",
+  "anh2.jpg",
+  "anh3.jpg",
+  "anh4.jpg",
+  "anh5.jpg",
+  "anh6.jpg",
+  "anh7.jpg",
+  "anh8.jpg",
+  "anh9.jpg",
+ 
+];
+// Nhạc: bỏ file vào thư mục "nhac" cạnh file này rồi ghi như dưới
+const SONGS=[
+ {title:"KHÔNG PHẢI EM KHÔNG PHẢI AI",artist:"Ca sĩ",src:"KHÔNG PHẢI EM, KHÔNG PHẢI AI.mp3"},
+ {title:"ANH YÊU EM NHIỀU",artist:"Ca sĩ",src:"Anh yêu em nhiều.mp3"},
+
+];
+
+function renderPhotos(){
+ const g=$('pgrid');g.innerHTML='';
+ if(!PHOTOS.length){g.innerHTML='<div class="empty">Chưa có ảnh nào.<br>Chưa thấy ảnh nào.<br>Kiểm tra: thư mục <b>anh</b> nằm cạnh file này, ảnh đặt tên 1.jpg, 2.jpg...<br>(Mở bằng link web thì không đọc được thư mục, hãy mở file đã tải về.)<br>Hoặc bấm dấu + để thêm tạm.</div>';return}
+ PHOTOS.forEach(src=>{
+  const im=document.createElement('img');const u=/^(blob:|data:|https?:)/.test(src)?src:encodeURI(src);im.src=u;im.loading='lazy';
+  im.onclick=()=>{$('lbimg').src=u;$('lightbox').style.display='flex'};
+  g.appendChild(im);
+ });
+}
+const audio=new Audio();let cur=-1;
+const fmt=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
+function renderSongs(){
+ const box=$('songs');box.innerHTML='';
+ if(!SONGS.length){box.innerHTML='<div class="empty">Chưa có bài hát nào.<br>Chưa thấy bài hát nào.<br>Kiểm tra: thư mục <b>nhac</b> nằm cạnh file này, nhạc đặt tên 1.mp3, 2.mp3...<br>(Mở bằng link web thì không đọc được thư mục, hãy mở file đã tải về.)<br>Hoặc bấm dấu + để thêm tạm.</div>';return}
+ SONGS.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='song'+(i===cur?' on':'');
+  d.innerHTML='';const t=document.createElement('span');t.textContent=s.title;
+  const a=document.createElement('small');a.textContent=s.artist||'';
+  d.append(t,a);d.onclick=()=>playSong(i);box.appendChild(d);
+ });
+}
+function playSong(i){
+ cur=i;const u=SONGS[i].src;audio.src=/^(blob:|data:|https?:)/.test(u)?u:encodeURI(u);audio.play().catch(()=>{});
+ $('sTitle').textContent=SONGS[i].title;$('sArtist').textContent=SONGS[i].artist||'';
+ renderSongs();
+}
+function toggleSong(){
+ if(cur<0){if(SONGS.length)playSong(0);return}
+ audio.paused?audio.play().catch(()=>{}):audio.pause();
+}
+function nextSong(){if(SONGS.length)playSong((cur+1)%SONGS.length)}
+function prevSong(){if(SONGS.length)playSong((cur-1+SONGS.length)%SONGS.length)}
+audio.addEventListener('play',()=>$('pp').textContent='⏸');
+audio.addEventListener('pause',()=>$('pp').textContent='▶');
+audio.addEventListener('ended',nextSong);
+audio.addEventListener('error',()=>{$('sArtist').textContent='Không phát được file này. Kiểm tra tên file, đường dẫn hoặc định dạng (nên dùng .mp3)';});
+audio.addEventListener('timeupdate',()=>{
+ $('barfill').style.width=(audio.duration?audio.currentTime/audio.duration*100:0)+'%';
+ $('tcur').textContent=fmt(audio.currentTime);$('tdur').textContent=fmt(audio.duration);
+});
+$('bar').addEventListener('click',e=>{
+ const r=e.currentTarget.getBoundingClientRect();
+ if(audio.duration)audio.currentTime=(e.clientX-r.left)/r.width*audio.duration;
+});
+$('pf').addEventListener('change',e=>{
+ [...e.target.files].forEach(f=>PHOTOS.push(URL.createObjectURL(f)));
+ e.target.value='';renderPhotos();
+});
+$('mf').addEventListener('change',e=>{
+ [...e.target.files].forEach(f=>SONGS.push({title:f.name.replace(/\.[^.]+$/,''),artist:'Dành cho cậu 💗',src:URL.createObjectURL(f)}));
+ e.target.value='';renderSongs();
+});
+try{const M=JSON.parse($('media').textContent);(M.photos||[]).forEach(p=>PHOTOS.push(p));(M.songs||[]).forEach(s=>SONGS.push(s))}catch(e){}
+// ===== CHỔ ĐỂ ẢNH & NHẠC CỦA BẠN =====
+// Ảnh: bỏ vào thư mục "anh" cạnh file này, đặt tên 1.jpg, 2.jpg ... 10.jpg (cũng nhận png, webp)
+// Nhạc: bỏ vào thư mục "nhac", đặt tên 1.mp3, 2.mp3, 3.mp3 (cũng nhận m4a, wav)
+// Đổi tên hiển thị của bài hát ở 2 dòng dưới:
+const TEN_BAI=["Bài hát 1","Bài hát 2","Bài hát 3"];
+const CA_SI="Dành cho cậu 💗";
+function findImg(i,k=0){const ex=['jpg','jpeg','png','webp'];return new Promise(ok=>{if(k>=ex.length)return ok(null);const u='anh/'+i+'.'+ex[k],im=new Image();im.onload=()=>ok(u);im.onerror=()=>findImg(i,k+1).then(ok);im.src=u})}
+function findSong(i,k=0){const ex=['mp3','m4a','wav'];return new Promise(ok=>{if(k>=ex.length)return ok(null);const u='nhac/'+i+'.'+ex[k],a=new Audio();let d=0;const fin=v=>{if(!d){d=1;ok(v)}};a.preload='metadata';a.onloadedmetadata=()=>fin(u);a.onerror=()=>{if(!d){d=1;findSong(i,k+1).then(ok)}};setTimeout(()=>fin(u),2500);a.src=u})}
+Promise.all([...Array(10)].map((_,i)=>findImg(i+1))).then(r=>{r.filter(Boolean).forEach(u=>PHOTOS.push(u));renderPhotos()});
+Promise.all([0,1,2].map(i=>findSong(i+1))).then(r=>{r.forEach((u,i)=>{if(u)SONGS.push({title:TEN_BAI[i]||'Bài hát '+(i+1),artist:CA_SI,src:u})});renderSongs()});
+renderPhotos();renderSongs();
+
+// SAO LẤP LÁNH (dịu hơn)
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');
+let stars=[];
+function resize(){
+ const r=window.devicePixelRatio||1;
+ canvas.width=innerWidth*r;canvas.height=innerHeight*r;
+ ctx.setTransform(r,0,0,r,0,0);
+ stars=Array.from({length:70},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.3+.3,a:Math.random()*6}));
+}
+resize();addEventListener('resize',resize);
+function drawStars(){
+ ctx.clearRect(0,0,innerWidth,innerHeight);
+ stars.forEach(s=>{
+  s.a+=.018;
+  ctx.globalAlpha=.15+Math.abs(Math.sin(s.a))*.5;
+  ctx.fillStyle='#f6e9f0';
+  ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+ });
+ ctx.globalAlpha=1;requestAnimationFrame(drawStars);
+}
+drawStars();
+
+// CÁNH HOA RƠI (nhẹ, mờ)
+const pcv=document.getElementById('petals'),pc=pcv.getContext('2d');
+let petals=[];
+function resizePetals(){
+ const r=window.devicePixelRatio||1;
+ pcv.width=innerWidth*r;pcv.height=innerHeight*r;
+ pc.setTransform(r,0,0,r,0,0);
+ petals=Array.from({length:16},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,size:Math.random()*4+3,speed:Math.random()*.7+.3,sway:Math.random()*2,angle:Math.random()*6}));
+}
+resizePetals();addEventListener('resize',resizePetals);
+function drawPetals(){
+ pc.clearRect(0,0,innerWidth,innerHeight);
+ petals.forEach(p=>{
+  p.y+=p.speed;p.x+=Math.sin(p.angle)*p.sway*.3;p.angle+=.018;
+  if(p.y>innerHeight+10){p.y=-10;p.x=Math.random()*innerWidth}
+  pc.save();pc.translate(p.x,p.y);pc.rotate(p.angle);
+  pc.fillStyle='rgba(240,196,214,.55)';
+  pc.beginPath();pc.ellipse(0,0,p.size,p.size*.55,0,0,Math.PI*2);pc.fill();
+  pc.restore();
+ });
+ requestAnimationFrame(drawPetals);
+}
+drawPetals();
+</script>
+</body>
+</html>
